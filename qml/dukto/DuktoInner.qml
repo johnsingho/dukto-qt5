@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-import QtQuick 1.0
+import QtQuick 2.3
 
 Rectangle {
     state: "buddies"
@@ -35,7 +35,10 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        onClicked: parent.state = tab
+        function onClicked()
+        {
+            parent.state = tab
+        }
     }
 
     ToolBar {
@@ -43,7 +46,8 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        onClicked: {
+        function onClicked()
+        {
             if (command == "ip") showIpList();
             if (command == "settings") showSettings();
         }
