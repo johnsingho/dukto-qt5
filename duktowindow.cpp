@@ -27,22 +27,25 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-DuktoWindow::DuktoWindow(QWidget *parent) :
-    QmlApplicationViewer(parent), mGuiBehind(NULL)
+DuktoWindow::DuktoWindow(QWidget *parent)
+    : QWidget(parent)
+    , QmlApplicationViewer(NULL)
+    , mGuiBehind(NULL)
 {
-    // Configure window
+    // Configure window    
     setAcceptDrops(true);
     setWindowTitle("Dukto");
+
 #ifndef Q_WS_S60
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinimizeButtonHint);
-    setMaximumSize(350, 5000);
-    setMinimumSize(350, 500);
+    QWidget::setMaximumSize(350, 5000);
+    QWidget::setMinimumSize(350, 500);
 #endif
     setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);
 
 #ifdef Q_OS_WIN
     // Taskbar integration with Win7
-    mWin7.init(this->winId());
+    mWin7.init(((QWidget*)this)->winId());
 #endif
 }
 
@@ -56,6 +59,27 @@ bool DuktoWindow::winEvent(MSG* message, long* result)
 void DuktoWindow::setGuiBehindReference(GuiBehind* ref)
 {
     mGuiBehind = ref;
+}
+
+void DuktoWindow::deleteLater()
+{
+    QWidget* pWid = this;
+    pWid->deleteLater();
+}
+void DuktoWindow::setVisible(bool visible)
+{
+    QWidget* pWid = this;
+    pWid->setVisible(visible);
+}
+bool DuktoWindow::isVisible()const
+{
+    const QWidget* pWid = this;
+    return pWid->isVisible();
+}
+bool DuktoWindow::close()
+{
+    QWidget* pWid = this;
+    return pWid->close();
 }
 
 void DuktoWindow::dragEnterEvent(QDragEnterEvent *event)

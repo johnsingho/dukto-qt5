@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
+#include "ecwin7.h"
 
 // Windows only GUID definitions
 #if defined(Q_OS_WIN)
@@ -34,7 +35,7 @@ EcWin7::EcWin7()
 void EcWin7::init(WId wid)
 {
     mWindowId = wid;
-    mTaskbarMessageId = RegisterWindowMessage(L"TaskbarButtonCreated");
+    mTaskbarMessageId = RegisterWindowMessageW(L"TaskbarButtonCreated");
 }
 
 // Windows event handler callback function
@@ -58,14 +59,14 @@ bool EcWin7::winEvent(MSG * message, long * result)
 void EcWin7::setProgressValue(int value, int max)
 {
     if (!mTaskbar) return;
-    mTaskbar->SetProgressValue(mWindowId, value, max);
+    mTaskbar->SetProgressValue((HWND)mWindowId, value, max);
 }
 
 // Set progress bar current state (active, error, pause, ecc...)
 void EcWin7::setProgressState(ToolBarProgressState state)
 {
     if (!mTaskbar) return;
-    mTaskbar->SetProgressState(mWindowId, (TBPFLAG)state);
+    mTaskbar->SetProgressState((HWND)mWindowId, (TBPFLAG)state);
 }
 
 // Set new overlay icon and corresponding description (for accessibility)
@@ -77,18 +78,18 @@ void EcWin7::setOverlayIcon(QString iconName, QString description)
     if (mOverlayIcon != NULL) oldIcon = mOverlayIcon;
     if (iconName.isEmpty())
     {
-        mTaskbar->SetOverlayIcon(mWindowId, NULL, NULL);
+        mTaskbar->SetOverlayIcon((HWND)mWindowId, NULL, NULL);
         mOverlayIcon = NULL;
     }
     else
     {
-        mOverlayIcon = (HICON) LoadImage(GetModuleHandle(NULL),
+        mOverlayIcon = (HICON) LoadImageW(GetModuleHandle(NULL),
                                  iconName.toStdWString().c_str(),
                                  IMAGE_ICON,
                                  0,
                                  0,
-                                 NULL);
-        mTaskbar->SetOverlayIcon(mWindowId, mOverlayIcon, description.toStdWString().c_str());
+                                 0);
+        mTaskbar->SetOverlayIcon((HWND)mWindowId, mOverlayIcon, description.toStdWString().c_str());
     }
     if ((oldIcon != NULL) && (oldIcon != mOverlayIcon))
     {

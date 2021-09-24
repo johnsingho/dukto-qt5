@@ -1,7 +1,7 @@
 project(dukto)
 cmake_minimum_required(VERSION 2.8.12)
 
-OPTION(USE_QT5 "Build with qt5" OFF)
+OPTION(USE_QT5 "Build with qt5" ON)
 OPTION(USE_UPDATER "Add updater for application" OFF)
 OPTION(USE_SINGLE_APP "Enable only single instance" OFF)
 
@@ -38,7 +38,8 @@ endif()
 if(USE_QT5)
     find_package(Qt5Widgets REQUIRED)
     find_package(Qt5Network REQUIRED)
-    find_package(Qt5Declarative REQUIRED)
+    find_package(Qt5Quick REQUIRED)
+    #find_package(Qt5Declarative REQUIRED)
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 else()
@@ -117,7 +118,7 @@ add_executable(${PROJECT_NAME}
                 ${DUKTO_MOC}
                 ${DUKTO_RESOURCES_RCC})
 if(USE_QT5)
-    qt5_use_modules(${PROJECT_NAME} Gui Widgets Network Declarative)
+    qt5_use_modules(${PROJECT_NAME} Gui Widgets Network Quick)
     set(QT_LIBRARIES "")
 endif()
 
@@ -130,7 +131,7 @@ endif()
 target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${DUKTO_LIBS})
 
 if(WIN32)
-    target_link_libraries(${PROJECT_NAME} libWs2_32 libole32 libNetapi32)
+    target_link_libraries(${PROJECT_NAME} Ws2_32 ole32 Netapi32)
 endif()
 
 if(UNIX AND NOT APPLE)

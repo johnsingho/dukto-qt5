@@ -33,7 +33,7 @@
 #endif
 
 #if !defined(SYMBIAN) && defined(SINGLE_APP)
-#include "qtsingleapplication.h"
+#include <QtSingleApplication>
 #endif
 
 int main(int argc, char *argv[])

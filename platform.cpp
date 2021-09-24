@@ -31,17 +31,9 @@
 #endif
 
 #if defined(Q_OS_WIN)
+#define WIN32_MEAN_AND_LEAN
 #include <windows.h>
 #include <lmaccess.h>
-
-typedef struct _USER_INFO_24 {
-  BOOL   usri24_internet_identity;
-  DWORD  usri24_flags;
-  LPWSTR usri24_internet_provider_name;
-  LPWSTR usri24_internet_principal_name;
-  PSID   usri24_user_sid;
-} USER_INFO_24, *PUSER_INFO_24, *LPUSER_INFO_24;
-
 
 #endif
 
@@ -237,9 +229,11 @@ QString Platform::getMacTempAvatarPath()
 
 #include <objbase.h>
 
+#ifndef ARRAYSIZE
 #define ARRAYSIZE(a) \
   ((sizeof(a) / sizeof(*(a))) / \
   static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+#endif
 
 typedef HRESULT (WINAPI*pfnSHGetUserPicturePathEx)(
     LPCWSTR pwszUserOrPicName,
@@ -256,7 +250,7 @@ QString Platform::getWinTempAvatarPath()
 {
     // Get file path
     CoInitialize(NULL);
-    HMODULE hMod = LoadLibrary(L"shell32.dll");
+    HMODULE hMod = LoadLibraryW(L"shell32.dll");
     pfnSHGetUserPicturePathEx picPathFn = (pfnSHGetUserPicturePathEx)GetProcAddress(hMod, (LPCSTR)810);
     WCHAR picPath[500] = {0}, srcPath[500] = {0};
     HRESULT ret = picPathFn(NULL, 0, NULL, picPath, ARRAYSIZE(picPath), srcPath, ARRAYSIZE(srcPath));

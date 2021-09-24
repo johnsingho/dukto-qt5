@@ -24,16 +24,17 @@
 #include "updateschecker.h"
 #include "systemtray.h"
 
+#include <QApplication>
 #include <QHash>
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
+#include <QQuickView>
+#include <QQmlContext>
 #include <QTimer>
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileDialog>
 #include <QClipboard>
 #include <QApplication>
-#include <QDeclarativeProperty>
 #include <QGraphicsObject>
 #include <QRegExp>
 #include <QThread>
@@ -413,7 +414,7 @@ void GuiBehind::sendText()
 void GuiBehind::sendScreen()
 {
     // Minimize window
-    mView->setWindowState(Qt::WindowMinimized);
+    ((QWidget*)mView)->setWindowState(Qt::WindowMinimized);
 
     QTimer::singleShot(500, this, SLOT(sendScreenStage2()));
 }
@@ -424,7 +425,7 @@ void GuiBehind::sendScreenStage2() {
     QPixmap screen = QPixmap::grabWindow(QApplication::desktop()->winId());
 
     // Restore window
-    mView->setWindowState(Qt::WindowActive);
+    ((QWidget*)mView)->setWindowState(Qt::WindowActive);
 
     // Salvataggio screenshot in file
     QTemporaryFile tempFile;

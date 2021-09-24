@@ -6,8 +6,9 @@
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
-QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += network
+QT += qml quick
 
 TARGET = dukto
 TEMPLATE = app
@@ -92,7 +93,8 @@ mac:ICON = dukto.icns
 # Allow network access on Symbian
 symbian:TARGET.CAPABILITY += NetworkServices
 
+#no need for windows
 ### libnotify
-CONFIG+=link_pkgconfig
-PKGCONFIG+=libnotify
-DEFINES+=NOTIFY_LIBNOTIFY
+#CONFIG+=link_pkgconfig
+#PKGCONFIG+=libnotify
+#DEFINES+=NOTIFY_LIBNOTIFY

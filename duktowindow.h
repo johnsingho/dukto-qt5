@@ -20,13 +20,16 @@
 #define DUKTOWINDOW_H
 
 #include "qmlapplicationviewer/qmlapplicationviewer.h"
+#include <QWidget>
+
 #ifdef Q_OS_WIN
 #include "ecwin7.h"
 #endif
 
+
 class GuiBehind;
 
-class DuktoWindow : public QmlApplicationViewer
+class DuktoWindow : public QWidget, protected QmlApplicationViewer
 {
 public:
     explicit DuktoWindow(QWidget *parent = 0);
@@ -34,6 +37,16 @@ public:
 #ifdef Q_OS_WIN
     inline EcWin7* win7() { return &mWin7; }
 #endif
+
+    using QmlApplicationViewer::showExpanded;
+    using QmlApplicationViewer::rootContext;
+    using QmlApplicationViewer::setSource;
+
+public Q_SLOTS:
+    void deleteLater();
+    virtual void setVisible(bool visible);
+    bool isVisible() const;
+    bool close();
 
 protected:
 #ifdef Q_OS_WIN
